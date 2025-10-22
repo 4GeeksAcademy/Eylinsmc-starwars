@@ -1,32 +1,59 @@
-export const initialStore=()=>{
-  return{
+export const initialStore = () => {
+  return {
     message: null,
-    todos: [
-      {
-        id: 1,
-        title: "Make the bed",
-        background: null,
-      },
-      {
-        id: 2,
-        title: "Do my homework",
-        background: null,
-      }
-    ]
+    characters: JSON.parse(localStorage.getItem("characters")) || [],
+    vehicles: JSON.parse(localStorage.getItem("vehicles")) || [],
+    planets: JSON.parse(localStorage.getItem("planets")) || [],
+    favorites: JSON.parse(localStorage.getItem("favorites")) || [],
   }
 }
 
+function getFavoriteType(item) {
+  if (item.properties.model) return "vehicle";
+  if (item.properties.climate) return "planet";
+  if (item.properties.gender) return "character";
+  return "unknown";
+}
+
 export default function storeReducer(store, action = {}) {
-  switch(action.type){
-    case 'add_task':
-
-      const { id,  color } = action.payload
-
+  switch (action.type) {
+    case "SET_CHARACTERS":
       return {
         ...store,
-        todos: store.todos.map((todo) => (todo.id === id ? { ...todo, background: color } : todo))
+        characters: action.payload
       };
+    case "SET_VEHICLES":
+      return {
+        ...store,
+        vehicles: action.payload
+      };
+    case "SET_PLANETS":
+      return {
+        ...store,
+        planets: action.payload
+      };
+    case "ADD_FAVORITE": {
+      const type = action.payload.type || getFavoriteType(action.payload);
+      const exists = store.favorites.some(fav => fav.uid === action.payload.uid && (fav.type || getFavoriteType(fav)) === type);
+      if (exists) return store;
+      const newFavorite = { ...action.payload, type };
+      const newFavorites = [...store.favorites, newFavorite];
+      localStorage.setItem("favorites", JSON.stringify(newFavorites));
+      return {
+        ...store,
+        favorites: newFavorites
+      };
+    }
+    case "REMOVE_FAVORITE": {
+      const type = action.payload.type || getFavoriteType(action.payload);
+      const newFavorites = store.favorites.filter(fav => !(fav.uid === action.payload.uid && (fav.type || getFavoriteType(fav)) === type));
+      localStorage.setItem("favorites", JSON.stringify(newFavorites));
+      return {
+        ...store,
+        favorites: newFavorites
+      };
+    }
     default:
-      throw Error('Unknown action.');
-  }    
+      return store;
+  }
 }
