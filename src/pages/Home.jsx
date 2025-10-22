@@ -12,18 +12,24 @@ export const Home = () => {
     <div className="container">
       <CardCarousel
         title="Characters"
-        items={store.characters}
-        renderItem={(character, key) => <CharacterCard key={key} character={character} />}
+        items={store.characters || []}
+        renderItem={(character, key) => (
+          <CharacterCard key={key} character={character} />
+        )}
       />
+
       <CardCarousel
         title="Planets"
-        items={store.planets}
+        items={store.planets || []}
         renderItem={(planet, key) => <PlanetCard key={key} planet={planet} />}
       />
+
       <CardCarousel
         title="Vehicles"
-        items={store.vehicles}
-        renderItem={(vehicle, key) => <VehicleCard key={key} vehicle={vehicle} />}
+        items={store.vehicles || []}
+        renderItem={(vehicle, key) => (
+          <VehicleCard key={key} vehicle={vehicle} />
+        )}
       />
     </div>
   );
