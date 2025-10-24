@@ -33,4 +33,13 @@ export default function Planet() {
           <h2 className="mb-3">{planet.properties.name}</h2>
           <p><strong>Climate:</strong> {planet.properties.climate}</p>
           <p><strong>Population:</strong> {planet.properties.population}</p>
-          <p><stron
+          <p><strong>Terrain:</strong> {planet.properties.terrain}</p>
+          <p><strong>Gravity:</strong> {planet.properties.gravity}</p>
+          <p><strong>Rotation Period:</strong> {planet.properties.rotation_period}</p>
+          <p className="mt-3">{planet.description}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
